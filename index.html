@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe - Humano vs Máquina</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #tabuleiro {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 8px;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .celula {
+      width: 80px;
+      height: 80px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #mensagem {
+      margin-top: 15px;
+      font-size: 16px;
+      min-height: 20px;
+    }
+    #reiniciar {
+      margin-top: 15px;
+      padding: 6px 14px;
+      font-size: 14px;
+    }
+    #github {
+      margin-top: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h2>TIC TAC TOE</h2>
+  <div id="tabuleiro">
+    <button class="celula" onclick="jogar(0)"></button>
+    <button class="celula" onclick="jogar(1)"></button>
+    <button class="celula" onclick="jogar(2)"></button>
+    <button class="celula" onclick="jogar(3)"></button>
+    <button class="celula" onclick="jogar(4)"></button>
+    <button class="celula" onclick="jogar(5)"></button>
+    <button class="celula" onclick="jogar(6)"></button>
+    <button class="celula" onclick="jogar(7)"></button>
+    <button class="celula" onclick="jogar(8)"></button>
+  </div>
+  <div id="mensagem"></div>
+  <button id="reiniciar" onclick="reiniciar()">Reset</button>
+  <br><br>
+  <a id="github" href="https://github.com/insta092" target="_blank">
+    <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
+  </a>
+
+  <script>
+    const celulas = document.querySelectorAll('.celula');
+    let tabuleiro = ["", "", "", "", "", "", "", "", ""];
+
+    function jogar(i) {
+      if (tabuleiro[i] || vencedor(tabuleiro)) return;
+      tabuleiro[i] = "X";
+      atualizar();
+      if (!vencedor(tabuleiro) && tabuleiro.includes("")) iaJoga();
+    }
+
+    function atualizar() {
+      celulas.forEach((c, i) => c.innerText = tabuleiro[i]);
+      const win = vencedor(tabuleiro);
+      const msg = document.getElementById('mensagem');
+      msg.innerText = win === "X" ? "Você Ganhou! 🎉" :
+                      win === "O" ? "Você Perdeu! 🤖" :
+                      tabuleiro.includes("") ? "" : "Empate!";
+    }
+
+    function reiniciar() {
+      tabuleiro = ["", "", "", "", "", "", "", "", ""];
+      atualizar();
+    }
+
+    function vencedor(b) {
+      const l = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+      for (const [a,b1,c] of l)
+        if (b[a] && b[a] === b[b1] && b[a] === b[c]) return b[a];
+      return null;
+    }
+
+    function iaJoga() {
+      let best = -Infinity, jogada;
+      for (let i = 0; i < 9; i++) {
+        if (!tabuleiro[i]) {
+          tabuleiro[i] = "O";
+          let score = minimax(tabuleiro, 0, false);
+          tabuleiro[i] = "";
+          if (score > best) {
+            best = score;
+            jogada = i;
+          }
+        }
+      }
+      tabuleiro[jogada] = "O";
+      atualizar();
+    }
+
+    function minimax(b, d, max) {
+      let win = vencedor(b);
+      if (win === "X") return -1;
+      if (win === "O") return 1;
+      if (!b.includes("")) return 0;
+
+      if (max) {
+        let maxScore = -Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (!b[i]) {
+            b[i] = "O";
+            maxScore = Math.max(minimax(b, d + 1, false), maxScore);
+            b[i] = "";
+          }
+        }
+        return maxScore;
+      } else {
+        let minScore = Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (!b[i]) {
+            b[i] = "X";
+            minScore = Math.min(minimax(b, d + 1, true), minScore);
+            b[i] = "";
+          }
+        }
+        return minScore;
+      }
+    }
+  </script>
+</body>
+</html>
