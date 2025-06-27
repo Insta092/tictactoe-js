@@ -28,3 +28,10 @@ Sou iniciante em desenvolvimento web e criei este jogo como um exercício práti
 
 💡 Se você está aprendendo JavaScript assim como eu, esse projeto pode te ajudar a visualizar conceitos de forma prática.  
 📥 Contribuições, sugestões e dicas são super bem-vindas!
+---
+### 🧪 Teste o Jogo Agora!
+
+Você pode jogar diretamente no navegador clicando no link abaixo:
+
+👉 [**Jogar Tic Tac Toe com IA**](https://insta092.github.io/tictactoe-js/) 👈
+
